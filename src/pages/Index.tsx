@@ -63,6 +63,7 @@ export default function Index() {
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [childMode, setChildMode] = useState<boolean>(getChildMode());
+  const [showPlans, setShowPlans] = useState(false);
 
   useEffect(() => {
     const onStorage = () => setChildMode(getChildMode());
@@ -253,13 +254,72 @@ export default function Index() {
           </div>
         </div>
 
-        <button
-          onClick={() => navigate("/settings")}
-          className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/10 transition-colors"
-        >
-          <Icon name="Settings" size={20} className="text-white/70" />
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setShowPlans(true)}
+            className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/10 transition-colors relative group"
+          >
+            <Icon name="Crown" size={18} className="text-yellow-400/70 group-hover:text-yellow-300 transition-colors" />
+          </button>
+          <button
+            onClick={() => navigate("/settings")}
+            className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/10 transition-colors"
+          >
+            <Icon name="Settings" size={20} className="text-white/70" />
+          </button>
+        </div>
       </header>
+
+      {/* Попап с тарифами */}
+      {showPlans && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          onClick={() => setShowPlans(false)}
+        >
+          <div
+            className="w-full max-w-sm rounded-2xl border border-white/10 bg-black/90 backdrop-blur-xl p-6 space-y-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-center space-y-1">
+              <div className="flex items-center justify-center gap-2">
+                <Icon name="Crown" size={20} className="text-yellow-400" />
+                <h2 className="text-lg font-semibold text-white">Kruel Premium</h2>
+              </div>
+              <p className="text-xs text-white/40">Генерация картинок в любом стиле</p>
+            </div>
+
+            {[
+              { label: "1 неделя", price: "300 ₽", per: "~43 ₽/день", highlight: false },
+              { label: "1 месяц", price: "650 ₽", per: "~22 ₽/день", highlight: true },
+              { label: "1 год", price: "1 100 ₽", per: "~3 ₽/день", highlight: false },
+            ].map((plan) => (
+              <button
+                key={plan.label}
+                className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl border transition-all ${
+                  plan.highlight
+                    ? "border-purple-500/60 bg-gradient-to-r from-purple-600/20 to-blue-600/20 hover:from-purple-600/30 hover:to-blue-600/30"
+                    : "border-white/10 bg-white/5 hover:bg-white/10"
+                }`}
+              >
+                <div className="text-left">
+                  <p className="text-sm font-medium text-white">{plan.label}</p>
+                  <p className="text-xs text-white/40">{plan.per}</p>
+                </div>
+                <div className="text-right">
+                  <p className={`text-base font-bold ${plan.highlight ? "text-purple-300" : "text-white"}`}>{plan.price}</p>
+                  {plan.highlight && (
+                    <p className="text-[10px] text-purple-400 font-medium">Популярное</p>
+                  )}
+                </div>
+              </button>
+            ))}
+
+            <p className="text-center text-[10px] text-white/20 pt-1">
+              Оплата временно недоступна — скоро откроем
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Боковая панель */}
       {sidebarVisible && (

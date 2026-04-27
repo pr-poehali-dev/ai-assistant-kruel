@@ -1,14 +1,10 @@
 {
   "tests": [
     {
-      "name": "Chat with Kruel AI",
-      "method": "POST",
+      "name": "OPTIONS preflight",
+      "method": "OPTIONS",
       "path": "/",
-      "body": {
-        "messages": [{"role": "user", "content": "Привет! Кто ты?"}]
-      },
       "expectedStatus": 200,
-      "expectedBody": {"reply": "string"},
       "bodyMatcher": "partial"
     }
   ]

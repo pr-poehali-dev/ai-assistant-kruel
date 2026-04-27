@@ -17,7 +17,7 @@ SYSTEM_PROMPT = """Ты Kruel AI — самый умный, честный и м
 
 
 def handler(event: dict, context) -> dict:
-    """Чат с Kruel AI на базе GPT-4o"""
+    """Чат с Kruel AI через OpenRouter (без VPN)"""
 
     if event.get("httpMethod") == "OPTIONS":
         return {
@@ -34,21 +34,23 @@ def handler(event: dict, context) -> dict:
     body = json.loads(event.get("body") or "{}")
     messages = body.get("messages", [])
 
-    api_key = os.environ.get("OPENAI_API_KEY", "")
+    api_key = os.environ.get("OPENROUTER_API_KEY", "")
 
     payload = json.dumps({
-        "model": "gpt-4o",
+        "model": "nousresearch/hermes-3-llama-3.1-405b:free",
         "messages": [{"role": "system", "content": SYSTEM_PROMPT}] + messages,
         "max_tokens": 1500,
         "temperature": 0.85,
     }).encode("utf-8")
 
     req = urllib.request.Request(
-        "https://api.openai.com/v1/chat/completions",
+        "https://openrouter.ai/api/v1/chat/completions",
         data=payload,
         headers={
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}",
+            "HTTP-Referer": "https://poehali.dev",
+            "X-Title": "Kruel AI",
         },
         method="POST",
     )

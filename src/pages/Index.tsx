@@ -18,6 +18,11 @@ interface Conversation {
 
 const CHAT_URL = "https://functions.poehali.dev/baa09bc3-4e87-4af0-bc13-0d6904e82f3f";
 
+function getChildMode(): boolean {
+  const saved = localStorage.getItem("kruel-child-mode");
+  return saved === null ? true : saved === "true";
+}
+
 function getTime() {
   return new Date().toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
 }
@@ -113,7 +118,7 @@ export default function Index() {
       const res = await fetch(CHAT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: apiMessages }),
+        body: JSON.stringify({ messages: apiMessages, childMode: getChildMode() }),
       });
       const data = await res.json();
       reply = data.reply || reply;

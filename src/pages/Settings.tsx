@@ -2,8 +2,13 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 
+function getSession(): { email: string; nick: string } | null {
+  try { return JSON.parse(localStorage.getItem("kruel-session") || "null"); } catch { return null; }
+}
+
 export default function Settings() {
   const navigate = useNavigate();
+  const session = getSession();
   const [theme, setTheme] = useState<"dark" | "light">(() => {
     return (localStorage.getItem("kruel-theme") as "dark" | "light") || "dark";
   });
@@ -22,6 +27,11 @@ export default function Settings() {
 
   const handleSupport = () => {
     window.open("mailto:kruelcompany2@gmail.com?subject=Поддержка Kruel AI", "_blank");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("kruel-session");
+    navigate("/auth");
   };
 
   return (
@@ -123,6 +133,33 @@ export default function Settings() {
             <Icon name="ExternalLink" size={16} className="text-muted-foreground" />
           </button>
         </div>
+
+        {/* Аккаунт */}
+        {session && (
+          <div className="bg-card border border-border rounded-2xl overflow-hidden">
+            <div className="px-4 py-3 border-b border-border">
+              <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium">Аккаунт</p>
+            </div>
+            <div className="px-4 py-4 flex items-center gap-3 border-b border-border">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center flex-shrink-0">
+                <span className="text-white text-sm font-bold">{session.nick[0].toUpperCase()}</span>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">@{session.nick}</p>
+                <p className="text-xs text-muted-foreground">{session.email}</p>
+              </div>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center gap-3 px-4 py-4 hover:bg-red-500/10 transition-colors"
+            >
+              <div className="w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+                <Icon name="LogOut" size={17} className="text-red-400" />
+              </div>
+              <p className="text-sm font-medium text-red-400">Выйти из аккаунта</p>
+            </button>
+          </div>
+        )}
 
         {/* О приложении */}
         <div className="bg-card border border-border rounded-2xl px-4 py-5 text-center">

@@ -28,8 +28,13 @@ function getTime() {
   return new Date().toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
 }
 
+function getSession(): { email: string; nick: string } | null {
+  try { return JSON.parse(localStorage.getItem("kruel-session") || "null"); } catch { return null; }
+}
+
 export default function Index() {
   const navigate = useNavigate();
+  const session = getSession();
   const [conversations, setConversations] = useState<Conversation[]>([
     {
       id: "1",
@@ -237,7 +242,12 @@ export default function Index() {
             }`}
           >
             <div className="flex items-center justify-between p-4 border-b border-border">
-              <span className="kruel-title text-lg tracking-widest">KRUEL AI</span>
+              <div>
+                <span className="kruel-title text-lg tracking-widest">KRUEL AI</span>
+                {session && (
+                  <p className="text-xs text-muted-foreground mt-0.5">@{session.nick}</p>
+                )}
+              </div>
               <button
                 onClick={closeSidebar}
                 className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors"

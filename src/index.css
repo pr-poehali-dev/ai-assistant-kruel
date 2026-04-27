@@ -240,3 +240,106 @@
 .page-enter {
   animation: fade-page 0.4s ease forwards;
 }
+
+/* Переливающийся фон чата */
+@keyframes aurora-move {
+  0% {
+    transform: translate(0%, 0%) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translate(8%, -6%) rotate(45deg) scale(1.1);
+  }
+  50% {
+    transform: translate(-6%, 8%) rotate(90deg) scale(0.95);
+  }
+  75% {
+    transform: translate(5%, 5%) rotate(135deg) scale(1.05);
+  }
+  100% {
+    transform: translate(0%, 0%) rotate(180deg) scale(1);
+  }
+}
+
+@keyframes aurora-move2 {
+  0% {
+    transform: translate(0%, 0%) rotate(0deg) scale(1.1);
+  }
+  33% {
+    transform: translate(-10%, 5%) rotate(-60deg) scale(0.9);
+  }
+  66% {
+    transform: translate(7%, -8%) rotate(-120deg) scale(1.15);
+  }
+  100% {
+    transform: translate(0%, 0%) rotate(-180deg) scale(1.1);
+  }
+}
+
+@keyframes aurora-move3 {
+  0% {
+    transform: translate(0%, 0%) rotate(0deg);
+  }
+  50% {
+    transform: translate(6%, -10%) rotate(90deg) scale(1.2);
+  }
+  100% {
+    transform: translate(0%, 0%) rotate(180deg);
+  }
+}
+
+.chat-bg {
+  position: relative;
+  background: #000;
+  overflow: hidden;
+}
+
+.chat-bg::before,
+.chat-bg::after,
+.chat-bg .aurora3 {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.chat-bg::before {
+  width: 70vw;
+  height: 70vw;
+  max-width: 500px;
+  max-height: 500px;
+  background: radial-gradient(circle, #a855f7 0%, #3b82f6 50%, transparent 80%);
+  top: -15%;
+  left: -15%;
+  animation: aurora-move 12s ease-in-out infinite;
+}
+
+.chat-bg::after {
+  width: 60vw;
+  height: 60vw;
+  max-width: 420px;
+  max-height: 420px;
+  background: radial-gradient(circle, #ec4899 0%, #06b6d4 50%, transparent 80%);
+  bottom: 5%;
+  right: -10%;
+  animation: aurora-move2 15s ease-in-out infinite;
+}
+
+.aurora3 {
+  width: 50vw;
+  height: 50vw;
+  max-width: 380px;
+  max-height: 380px;
+  background: radial-gradient(circle, #06b6d4 0%, #a855f7 40%, transparent 75%);
+  bottom: 30%;
+  left: 20%;
+  animation: aurora-move3 18s ease-in-out infinite;
+  opacity: 0.12;
+}
+
+.chat-bg > * {
+  position: relative;
+  z-index: 1;
+}

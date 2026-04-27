@@ -204,17 +204,20 @@ export default function Index() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background overflow-hidden page-enter">
+    <div className="flex flex-col h-screen overflow-hidden page-enter chat-bg">
+      {/* Aurora слой 3 */}
+      <div className="aurora3" />
+
       {/* Верхняя переливающаяся полоска */}
       <div className="rainbow-bar h-[3px] w-full flex-shrink-0" />
 
       {/* Шапка */}
-      <header className="flex items-center justify-between px-4 py-3 border-b border-border bg-background/95 backdrop-blur-sm flex-shrink-0 relative z-10">
+      <header className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-black/40 backdrop-blur-md flex-shrink-0 relative z-10">
         <button
           onClick={openSidebar}
-          className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-muted transition-colors"
+          className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/10 transition-colors"
         >
-          <Icon name="Menu" size={20} className="text-foreground/70" />
+          <Icon name="Menu" size={20} className="text-white/70" />
         </button>
 
         <h1 className="kruel-title text-2xl tracking-widest absolute left-1/2 -translate-x-1/2">
@@ -223,9 +226,9 @@ export default function Index() {
 
         <button
           onClick={() => navigate("/settings")}
-          className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-muted transition-colors"
+          className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/10 transition-colors"
         >
-          <Icon name="Settings" size={20} className="text-foreground/70" />
+          <Icon name="Settings" size={20} className="text-white/70" />
         </button>
       </header>
 
@@ -237,11 +240,11 @@ export default function Index() {
             onClick={closeSidebar}
           />
           <aside
-            className={`fixed top-0 left-0 h-full w-[80vw] max-w-[320px] bg-card border-r border-border z-50 flex flex-col ${
+            className={`fixed top-0 left-0 h-full w-[80vw] max-w-[320px] bg-black/80 backdrop-blur-xl border-r border-white/10 z-50 flex flex-col ${
               sidebarOpen ? "sidebar-open" : "sidebar-close"
             }`}
           >
-            <div className="flex items-center justify-between p-4 border-b border-border">
+            <div className="flex items-center justify-between p-4 border-b border-white/10">
               <div>
                 <span className="kruel-title text-lg tracking-widest">KRUEL AI</span>
                 {session && (
@@ -250,13 +253,13 @@ export default function Index() {
               </div>
               <button
                 onClick={closeSidebar}
-                className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors"
+                className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
               >
-                <Icon name="X" size={18} className="text-foreground/70" />
+                <Icon name="X" size={18} className="text-white/70" />
               </button>
             </div>
 
-            <div className="p-3 border-b border-border">
+            <div className="p-3 border-b border-white/10">
               <button
                 onClick={newChat}
                 className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/30 hover:from-purple-600/30 hover:to-blue-600/30 transition-all text-sm font-medium"
@@ -274,8 +277,8 @@ export default function Index() {
                 <button
                   key={conv.id}
                   onClick={() => loadConversation(conv)}
-                  className={`w-full text-left px-3 py-3 rounded-xl transition-all hover:bg-muted ${
-                    activeConvId === conv.id ? "bg-muted" : ""
+                  className={`w-full text-left px-3 py-3 rounded-xl transition-all hover:bg-white/10 ${
+                    activeConvId === conv.id ? "bg-white/10" : ""
                   }`}
                 >
                   <div className="flex items-start gap-2">
@@ -300,8 +303,8 @@ export default function Index() {
               <span className="kruel-title text-3xl">K</span>
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-foreground mb-2">Привет, я Kruel AI</h2>
-              <p className="text-muted-foreground text-sm max-w-xs leading-relaxed">
+              <h2 className="text-xl font-semibold text-white mb-2">Привет, я Kruel AI</h2>
+              <p className="text-white/50 text-sm max-w-xs leading-relaxed">
                 Задай любой вопрос — отвечу на всё. Можно голосом или текстом.
               </p>
             </div>
@@ -310,7 +313,7 @@ export default function Index() {
                 <button
                   key={q}
                   onClick={() => sendMessage(q)}
-                  className="px-4 py-2.5 rounded-xl text-sm border border-border hover:border-purple-500/50 hover:bg-muted transition-all text-left text-foreground/80"
+                  className="px-4 py-2.5 rounded-xl text-sm border border-white/15 bg-white/5 hover:border-purple-500/60 hover:bg-white/10 transition-all text-left text-white/80"
                 >
                   {q}
                 </button>
@@ -333,11 +336,11 @@ export default function Index() {
                   className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                     msg.role === "user"
                       ? "bg-gradient-to-br from-purple-600 to-blue-600 text-white rounded-br-sm"
-                      : "bg-muted text-foreground rounded-bl-sm"
+                      : "bg-white/10 backdrop-blur-sm text-white rounded-bl-sm border border-white/10"
                   }`}
                 >
                   <p>{msg.text}</p>
-                  <p className={`text-xs mt-1.5 ${msg.role === "user" ? "text-white/60" : "text-muted-foreground"}`}>
+                  <p className={`text-xs mt-1.5 ${msg.role === "user" ? "text-white/60" : "text-white/40"}`}>
                     {msg.time}
                   </p>
                 </div>
@@ -348,7 +351,7 @@ export default function Index() {
                 <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center mr-2 flex-shrink-0">
                   <span className="text-white text-xs font-bold" style={{ fontFamily: "Orbitron" }}>K</span>
                 </div>
-                <div className="bg-muted px-4 py-3 rounded-2xl rounded-bl-sm">
+                <div className="bg-white/10 backdrop-blur-sm border border-white/10 px-4 py-3 rounded-2xl rounded-bl-sm">
                   <div className="flex gap-1 items-center h-4">
                     <div className="typing-dot w-2 h-2 rounded-full bg-purple-400" />
                     <div className="typing-dot w-2 h-2 rounded-full bg-blue-400" />
@@ -364,7 +367,7 @@ export default function Index() {
 
       {/* Индикатор озвучки */}
       {isSpeaking && (
-        <div className="flex items-center justify-center gap-2 py-2 text-xs text-purple-400 border-t border-border">
+        <div className="flex items-center justify-center gap-2 py-2 text-xs text-purple-400 border-t border-white/10">
           <Icon name="Volume2" size={14} />
           <span>Kruel говорит...</span>
           <button onClick={stopSpeaking} className="underline hover:no-underline ml-1">
@@ -374,8 +377,8 @@ export default function Index() {
       )}
 
       {/* Поле ввода */}
-      <div className="p-4 border-t border-border bg-background/95 backdrop-blur-sm flex-shrink-0">
-        <div className="flex items-end gap-2 bg-muted rounded-2xl px-4 py-3 border border-border focus-within:border-purple-500/50 transition-colors">
+      <div className="p-4 border-t border-white/10 bg-black/30 backdrop-blur-md flex-shrink-0">
+        <div className="flex items-end gap-2 bg-white/5 rounded-2xl px-4 py-3 border border-white/10 focus-within:border-purple-500/50 transition-colors">
           <textarea
             ref={inputRef}
             value={inputText}
@@ -392,7 +395,7 @@ export default function Index() {
               className={`w-9 h-9 flex items-center justify-center rounded-xl transition-all ${
                 isListening
                   ? "bg-purple-600 text-white mic-active"
-                  : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+                  : "text-white/50 hover:text-white hover:bg-white/10"
               }`}
             >
               <Icon name={isListening ? "MicOff" : "Mic"} size={18} />

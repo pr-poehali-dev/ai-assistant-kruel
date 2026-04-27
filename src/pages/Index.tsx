@@ -62,6 +62,14 @@ export default function Index() {
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [childMode, setChildMode] = useState<boolean>(getChildMode());
+
+  useEffect(() => {
+    const onStorage = () => setChildMode(getChildMode());
+    window.addEventListener("storage", onStorage);
+    const interval = setInterval(() => setChildMode(getChildMode()), 1000);
+    return () => { window.removeEventListener("storage", onStorage); clearInterval(interval); };
+  }, []);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -233,9 +241,17 @@ export default function Index() {
           <Icon name="Menu" size={20} className="text-white/70" />
         </button>
 
-        <h1 className="kruel-title text-2xl tracking-widest absolute left-1/2 -translate-x-1/2">
-          KRUEL AI
-        </h1>
+        <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5">
+          <h1 className="kruel-title text-2xl tracking-widest">KRUEL AI</h1>
+          <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium ${
+            childMode
+              ? "bg-green-500/20 text-green-400 border border-green-500/30"
+              : "bg-red-500/20 text-red-400 border border-red-500/30"
+          }`}>
+            <div className={`w-1.5 h-1.5 rounded-full ${childMode ? "bg-green-400" : "bg-red-400"}`} />
+            {childMode ? "Детский режим" : "Взрослый режим"}
+          </div>
+        </div>
 
         <button
           onClick={() => navigate("/settings")}

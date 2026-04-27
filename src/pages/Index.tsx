@@ -16,13 +16,7 @@ interface Conversation {
   date: string;
 }
 
-const KRUEL_RESPONSES = [
-  "Интересный вопрос! Я Kruel — могу ответить на что угодно. Что именно тебя интересует подробнее?",
-  "Отличный вопрос. Давай разберём это детально — чем глубже копаем, тем интереснее ответы.",
-  "Я обработал твой запрос. Вот что мне известно по этой теме — это действительно увлекательно.",
-  "Hmm, давай подумаем вместе. Это многогранная тема с несколькими углами зрения.",
-  "Знаешь, именно такие вопросы делают нас умнее. Позволь объяснить подробнее.",
-];
+const CHAT_URL = "https://functions.poehali.dev/baa09bc3-4e87-4af0-bc13-0d6904e82f3f";
 
 function getTime() {
   return new Date().toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
@@ -110,9 +104,23 @@ export default function Index() {
     setInputText("");
     setIsTyping(true);
 
-    await new Promise((r) => setTimeout(r, 1200 + Math.random() * 800));
+    let reply = "Произошла ошибка. Попробуй ещё раз.";
+    try {
+      const apiMessages = newMessages.map((m) => ({
+        role: m.role === "assistant" ? "assistant" : "user",
+        content: m.text,
+      }));
+      const res = await fetch(CHAT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: apiMessages }),
+      });
+      const data = await res.json();
+      reply = data.reply || reply;
+    } catch {
+      reply = "Не удалось связаться с Kruel AI. Проверь интернет и попробуй снова.";
+    }
 
-    const reply = KRUEL_RESPONSES[Math.floor(Math.random() * KRUEL_RESPONSES.length)];
     const assistantMsg: Message = {
       id: (Date.now() + 1).toString(),
       role: "assistant",
